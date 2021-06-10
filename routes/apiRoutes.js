@@ -35,12 +35,13 @@ module.exports = (app) => {
         if (notes[i].id === chosenId) {
           notes.splice(i, 1)
           fs.writeFile('./db/db.json', JSON.stringify(notes), (err) =>
-            err ? console.error(err) : console.log('Commit logged!'))
+            err ? console.error(err) : console.log('note deleted! New notes: ', notes))
+          return
         }
 
       }
 
-      res.send(`Got a DELETE request for ${JSON.stringify(notes)}`)
+      res.json(notes)
     });
   });
   // app.post('/api/clear', (req, res) => {
