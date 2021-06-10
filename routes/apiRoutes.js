@@ -17,7 +17,7 @@ module.exports = (app) => {
   app.post('/api/notes', (req, res) => {
     console.log(req.body)
     db.push(req.body)
-    req.body.uuid = uuidv4();
+    req.body.id = uuidv4();
     console.log(db)
     fs.writeFile('./db/db.json', JSON.stringify(db), (err) =>
     err ? console.error(err) : console.log('Commit logged!'))
