@@ -3,6 +3,7 @@
 // These data sources hold arrays of information on table-data, waitinglist, etc.
 
 const db = require('../db/db.json');
+const fs = require('fs');
 
 
 // ROUTING
@@ -13,15 +14,11 @@ module.exports = (app) => {
 
   app.post('/api/notes', (req, res) => {
     console.log(req.body)
-    console.log(res)
-    // if (tableData.length < 5) {
-    //   tableData.push(req.body);
-    //   res.json(true);
-    // } else {
-    //   waitListData.push(req.body);
-    //   res.json(false);
-    // }
-    res.json(false);
+    db.push(req.body)
+    console.log(db)
+    fs.writeFile('./db/db.json', JSON.stringify(db), (err) =>
+    err ? console.error(err) : console.log('Commit logged!'))
+    res.json(req.body);
   });
   // app.post('/api/clear', (req, res) => {
   //   // Empty out the arrays of data
