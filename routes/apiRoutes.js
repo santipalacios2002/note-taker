@@ -30,9 +30,18 @@ module.exports = (app) => {
     fs.readFile('./db/db.json', (err, data) => {
       if (err) throw err;
       let notes = JSON.parse(data);
-      console.log(notes);
+      console.log(notes.length);
+      for (let i = 0; i < notes.length; i++) {
+        if (notes[i].id === chosenId) {
+          notes.splice(i, 1)
+          fs.writeFile('./db/db.json', JSON.stringify(notes), (err) =>
+            err ? console.error(err) : console.log('Commit logged!'))
+        }
+
+      }
+
       res.send(`Got a DELETE request for ${JSON.stringify(notes)}`)
-  });
+    });
   });
   // app.post('/api/clear', (req, res) => {
   //   // Empty out the arrays of data
