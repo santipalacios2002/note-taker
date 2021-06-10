@@ -4,6 +4,8 @@
 
 const db = require('../db/db.json');
 const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
+
 
 
 // ROUTING
@@ -15,10 +17,11 @@ module.exports = (app) => {
   app.post('/api/notes', (req, res) => {
     console.log(req.body)
     db.push(req.body)
+    req.body.uuid = uuidv4();
     console.log(db)
     fs.writeFile('./db/db.json', JSON.stringify(db), (err) =>
     err ? console.error(err) : console.log('Commit logged!'))
-    res.json(req.body);
+    res.json(db);
   });
   // app.post('/api/clear', (req, res) => {
   //   // Empty out the arrays of data
