@@ -20,8 +20,19 @@ module.exports = (app) => {
     req.body.id = uuidv4();
     console.log(db)
     fs.writeFile('./db/db.json', JSON.stringify(db), (err) =>
-    err ? console.error(err) : console.log('Commit logged!'))
+      err ? console.error(err) : console.log('Commit logged!'))
     res.json(db);
+  });
+
+  app.delete('/api/notes/:id', (req, res) => {
+    const chosenId = req.params.id
+    console.log('chosenId!!!!!!!!!!!:', chosenId)
+    fs.readFile('./db/db.json', (err, data) => {
+      if (err) throw err;
+      let notes = JSON.parse(data);
+      console.log(notes);
+      res.send(`Got a DELETE request for ${JSON.stringify(notes)}`)
+  });
   });
   // app.post('/api/clear', (req, res) => {
   //   // Empty out the arrays of data
