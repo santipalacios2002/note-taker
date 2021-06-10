@@ -7,7 +7,6 @@ const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 
 
-
 // ROUTING
 
 module.exports = (app) => {
@@ -30,25 +29,18 @@ module.exports = (app) => {
     fs.readFile('./db/db.json', (err, data) => {
       if (err) throw err;
       let notes = JSON.parse(data);
-      console.log(notes.length);
+      console.log('notes before delition:', notes)
+      
       for (let i = 0; i < notes.length; i++) {
         if (notes[i].id === chosenId) {
           notes.splice(i, 1)
-          fs.writeFile('./db/db.json', JSON.stringify(notes), (err) =>
-            err ? console.error(err) : console.log('note deleted! New notes: ', notes))
-          return
+          console.log('notes:', notes)
         }
-
       }
-
+      fs.writeFile('./db/db.json', JSON.stringify(notes), (err) =>
+        err ? console.error(err) : console.log('note deleted! New notes: ', notes))
       res.json(notes)
     });
   });
-  // app.post('/api/clear', (req, res) => {
-  //   // Empty out the arrays of data
-  //   tableData.length = 0;
-  //   waitListData.length = 0;
 
-  //   res.json({ ok: true });
-  // });
 };
