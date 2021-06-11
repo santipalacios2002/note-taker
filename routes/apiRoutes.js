@@ -5,8 +5,9 @@
 const db = require('../db/db.json');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
+const util = require('util');
 
-
+const writeFileAsync = util.promisify(fs.writeFile);
 // ROUTING
 
 module.exports = (app) => {
@@ -25,22 +26,14 @@ module.exports = (app) => {
 
   app.delete('/api/notes/:id', (req, res) => {
     const chosenId = req.params.id
-    console.log('chosenId!!!!!!!!!!!:', chosenId)
-    fs.readFile('./db/db.json', (err, data) => {
-      if (err) throw err;
-      let notes = JSON.parse(data);
-      console.log('notes before delition:', notes)
-      
-      for (let i = 0; i < notes.length; i++) {
-        if (notes[i].id === chosenId) {
-          notes.splice(i, 1)
-          console.log('notes:', notes)
-        }
+    let notes = require('../db/db.json');
+    for (let i = 0; i < notes.length; i++) {
+      if (notes[i].id === chosenId) {
+        notes.splice(i, 1)
       }
-      fs.writeFile('./db/db.json', JSON.stringify(notes), (err) =>
-        err ? console.error(err) : console.log('note deleted! New notes: ', notes))
-      res.json(notes)
-    });
+    }
+    writeFileAsync('./db/db.json', JSON.stringify(notes), (err) =>
+      err ? console.error(err) : console.log('note deleted! New notes: ', notes)).then(() => { res.json(notes) })
   });
 
 };
